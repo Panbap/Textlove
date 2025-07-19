@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Lovely</title>
+    <link rel="icon" href="https://github.com/Panbap/anh/blob/main/icon1.png?raw=true" type="image/png">
+</head>
+
+<body>
+    <div id="ui" style="display: none;">
+        <textarea id="inputText"></textarea><br />
+        <textarea id="imageLinks"></textarea><br />
+        <label>Chọn nhạc:</label>
+        <select id="musicSelector">
+            <option value="">-- Không chọn --</option>
+            <option value="./music/p.mp3">Phép màu</option>
+            <option value="./music/e.mp3">Lễ đường</option>
+            <option value="./music/d.mp3">Kỵ sĩ và ánh sao</option>
+            <option value="./music/s.mp3">Có chắc yêu là đây</option>
+        </select><br />
+
+        <div id="buttonContainer">
+            <button id="startBtn">Tạo link</button>
+            <button id="qrBtn">Tạo QR</button>
+        </div>
+
+
+        <a id="shareLink" target="_blank" title="Click để mở link trong tab mới"></a>
+        <div class="heart-frame" style="display:none; margin-top:10px;">
+            <canvas id="finalCanvas" width="320" height="296"></canvas>
+            <div class="info-text">Click ảnh để tải về</div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+    <script src="./assets/script.js"></script>
+</body>
+
+</html>
