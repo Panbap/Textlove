@@ -4,26 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Gửi lời nhắn yêu thương</title>
+    <title>Nhập dữ liệu</title>
     <link rel="icon" href="https://github.com/Panbap/anh/blob/main/icon1.png?raw=true" type="image/png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Panbap/fonts@new/fonts.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap" rel="stylesheet">
     <style>
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            font-size: 24px;
-            color: #555;
-            flex-direction: column;
-        }
-
         .spinner {
             border: 8px solid #f3f3f3;
             border-top: 8px solid #ff7094;
@@ -85,8 +69,13 @@
         <textarea id="inputText">Anh yêu em
 Anh nhớ em
 ❤</textarea><br />
-        <label>Thêm link ảnh (nhập một link phải enter xuống dòng):</label><br />
+
+        <label>Thêm link ảnh (nhập tối đa 3-5 ảnh):</label><br />
+        <label for="upload-imgbb" class="custom-upload-button">📷 Upload ảnh</label>
+        <input type="file" id="upload-imgbb" accept="image/*" multiple hidden><br />
+
         <textarea id="imageLinks"></textarea><br />
+
         <label>Chọn nhạc:</label>
         <select id="musicSelector">
             <option value="">-- Không chọn --</option>
@@ -102,24 +91,55 @@ Anh nhớ em
         </div>
 
         <div id="donateQR" style="display: none; margin-top: 10px; text-align: center;">
-            <p>Ủng hộ tác giả ❤️</p>
-            <img src="https://github.com/Panbap/anh/blob/main/qr1.png?raw=true" alt="QR Donate" width="200" />
             <p>Đang tạo link...</p>
         </div>
 
         <a id="shareLink" target="_blank" title="Click để mở link trong tab mới"></a>
+        <button id="donateBtn">
+            Donate
+        </button>
+
+        <div id="donateModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+  background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+
+            <div
+                style="background: white; border-radius: 12px; padding: 20px; width: 300px; position: relative; text-align: center;">
+                <button id="closeDonateModal"
+                    style="position: absolute; top: 8px; right: 12px; background: transparent; border: none; font-size: 22px; cursor: pointer;">
+                    &times;
+                </button>
+                <p style="font-weight: bold; margin-bottom: 15px; color: #ff7094;">Quét mã QR để ủng hộ mình:</p>
+                <img id="donateQRImg" src="" alt="QR Donate"
+                    style="width: 180px; height: 180px; border-radius: 12px; border: 1px solid #ccc;" />
+                <p style="font-weight: bold; margin-bottom: 15px; color: #ff7094;">Cảm ơn bạn đã ủng hộ</p>
+            </div>
+        </div>
+
         <div class="heart-frame" style="display:none; margin-top:10px;">
-            <canvas id="finalCanvas" width="320" height="296"></canvas>
-            <div class="info-text">Click ảnh để tải về</div>
+            <canvas id="finalCanvas" width="300" height="296"></canvas>
+            <!-- <div class="info-text">Click ảnh để tải về</div> -->
+            <button id="downloadBtn" class="info-text">Tải ảnh QR</button>
             <img id="downloadPreview" style="display:none; width:100%; margin-top:10px;" />
         </div>
     </div>
-
+    <div id="captcha-popup">
+        <div>
+            <h3>Vui lòng nhập CAPTCHA</h3>
+            <div style="margin:15px 0; display: flex; align-items: center; gap: 10px;">
+                <span id="captcha-code"></span>
+                <button id="refresh-captcha" title="Làm mới CAPTCHA">🔄</button>
+            </div>
+            <input type="text" id="captcha-input" placeholder="Nhập mã xác thực.." autocomplete="off" />
+            <div id="captcha-error"></div>
+            <button id="captcha-submit">Xác nhận</button>
+        </div>
+    </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
     <script src="./assets/script.js"></script>
     <script>
-        const _0x31d00c=_0x1ea7;(function(_0x228721,_0x311821){const _0x156018=_0x1ea7,_0x489a58=_0x228721();while(!![]){try{const _0x2180c9=-parseInt(_0x156018(0x11e))/0x1+parseInt(_0x156018(0xea))/0x2+-parseInt(_0x156018(0xf0))/0x3+-parseInt(_0x156018(0x109))/0x4*(parseInt(_0x156018(0x11f))/0x5)+-parseInt(_0x156018(0x11d))/0x6*(-parseInt(_0x156018(0xfc))/0x7)+-parseInt(_0x156018(0xe8))/0x8*(-parseInt(_0x156018(0x10d))/0x9)+parseInt(_0x156018(0x107))/0xa;if(_0x2180c9===_0x311821)break;else _0x489a58['push'](_0x489a58['shift']());}catch(_0x2517be){_0x489a58['push'](_0x489a58['shift']());}}}(_0x53d1,0x650d5));const loadingText=document[_0x31d00c(0xf3)](_0x31d00c(0x122));let dots=0x0;function _0x1ea7(_0x31831a,_0x10f2ce){const _0x53d186=_0x53d1();return _0x1ea7=function(_0x1ea708,_0x426d3f){_0x1ea708=_0x1ea708-0xe7;let _0x24a387=_0x53d186[_0x1ea708];return _0x24a387;},_0x1ea7(_0x31831a,_0x10f2ce);}const loadingInterval=setInterval(()=>{const _0x3b66ac=_0x31d00c;dots=(dots+0x1)%0x4,loadingText[_0x3b66ac(0x10c)]=_0x3b66ac(0x11c)+'.'['repeat'](dots);},0xfa);window[_0x31d00c(0x118)](_0x31d00c(0x117),()=>{setTimeout(()=>{const _0x55161f=_0x1ea7;clearInterval(loadingInterval),document[_0x55161f(0xf3)](_0x55161f(0xf5))['style'][_0x55161f(0x100)]=_0x55161f(0x103),document[_0x55161f(0xf3)](_0x55161f(0xeb))[_0x55161f(0xf4)]['display']=_0x55161f(0x113);},0x1f4);});function _0x53d1(){const _0x80ebfc=['resize','getContext','display','textAlign','height','none','width','length','middle','7211750WwDJVv','fillStyle','32ZWTWoW','body','100vw','textContent','90aJTuMS','trim','Hệ\x20thống\x20đang\x20cập\x20nhật','zIndex','rgba(20,\x2020,\x2020,\x200.97)','fillRect','block','appendChild','onerror','createElement','load','addEventListener','font','textBaseline','auto','Loading','6RAUJmE','86654JjcbEu','399515vzjicx','https://github.com/Panbap/anh/blob/main/error/error2.jpg?raw=true','position','loading-text','100vh','forEach','408048YUQpqT','center','77302iWxCPr','main-content','left','canvas','measureText','fixed','474063sYiQVm','fillText','innerWidth','getElementById','style','loading-screen','innerHeight','top','#ffffff','src','onload','clearRect','195454EaMhpO','push'];_0x53d1=function(){return _0x80ebfc;};return _0x53d1();}const img=new Image();img[_0x31d00c(0xf9)]=_0x31d00c(0x120),document[_0x31d00c(0x10a)]['appendChild'](img);const canva=document[_0x31d00c(0x116)](_0x31d00c(0xed));document[_0x31d00c(0x10a)][_0x31d00c(0x114)](canva);const cts=canva[_0x31d00c(0xff)]('2d');function resize(){const _0x80829=_0x31d00c;canva['width']=window[_0x80829(0xf2)],canva[_0x80829(0x102)]=window[_0x80829(0xf6)];}function wrapText(_0x4b1eef,_0x388234,_0x505c4d,_0x2d84cf,_0x21af60,_0x39ad40){const _0x230893=_0x31d00c,_0x25c4d9=_0x388234['split']('\x20');let _0x269e56='';const _0x577859=[];for(let _0x46361f=0x0;_0x46361f<_0x25c4d9[_0x230893(0x105)];_0x46361f++){const _0x49feda=_0x269e56+_0x25c4d9[_0x46361f]+'\x20';_0x4b1eef[_0x230893(0xee)](_0x49feda)[_0x230893(0x104)]>_0x21af60&&_0x46361f>0x0?(_0x577859[_0x230893(0xfd)](_0x269e56[_0x230893(0x10e)]()),_0x269e56=_0x25c4d9[_0x46361f]+'\x20'):_0x269e56=_0x49feda;}_0x577859[_0x230893(0xfd)](_0x269e56[_0x230893(0x10e)]()),_0x577859[_0x230893(0xe7)]((_0x108493,_0x31067c)=>{const _0x52e420=_0x230893;_0x4b1eef[_0x52e420(0xf1)](_0x108493,_0x505c4d,_0x2d84cf+_0x31067c*_0x39ad40);});}function drawBackground(){const _0x12a4d2=_0x31d00c;cts[_0x12a4d2(0xfb)](0x0,0x0,canva['width'],canva[_0x12a4d2(0x102)]),cts[_0x12a4d2(0x108)]=_0x12a4d2(0x111),cts[_0x12a4d2(0x112)](0x0,0x0,canva[_0x12a4d2(0x104)],canva[_0x12a4d2(0x102)]),cts[_0x12a4d2(0x108)]=_0x12a4d2(0xf8),cts[_0x12a4d2(0x119)]='bold\x2048px\x20\x27FrankBellamyiCiel\x27,\x20Arial',cts[_0x12a4d2(0x101)]=_0x12a4d2(0xe9),cts[_0x12a4d2(0x11a)]=_0x12a4d2(0x106);const _0x78e925=0.8*canva[_0x12a4d2(0x104)],_0x52283b=canva[_0x12a4d2(0x102)]/0x2-0x1e;wrapText(cts,_0x12a4d2(0x10f),canva[_0x12a4d2(0x104)]/0x2,_0x52283b,_0x78e925,0x3c);}window[_0x31d00c(0x118)](_0x31d00c(0xfe),()=>{resize(),drawBackground();}),resize(),canva[_0x31d00c(0xf4)][_0x31d00c(0x121)]=_0x31d00c(0xef),canva['style'][_0x31d00c(0xf7)]=0x0,canva['style'][_0x31d00c(0xec)]=0x0,canva[_0x31d00c(0xf4)][_0x31d00c(0x104)]=_0x31d00c(0x10b),canva['style'][_0x31d00c(0x102)]=_0x31d00c(0x123),canva[_0x31d00c(0xf4)][_0x31d00c(0x110)]=0x270f,canva[_0x31d00c(0xf4)]['pointerEvents']=_0x31d00c(0x11b),canva[_0x31d00c(0xf4)][_0x31d00c(0x100)]=_0x31d00c(0x103),img[_0x31d00c(0xfa)]=()=>{const _0x401962=_0x31d00c;img[_0x401962(0xf4)][_0x401962(0x100)]=_0x401962(0x103),canva[_0x401962(0xf4)]['display']=_0x401962(0x113),drawBackground();},img[_0x31d00c(0x115)]=()=>{const _0x14a283=_0x31d00c;img[_0x14a283(0xf4)]['display']='none',canva[_0x14a283(0xf4)]['display']=_0x14a283(0x103);};
+        const _0x39e7e7=_0x5a4f;(function(_0x31403a,_0x98ea4e){const _0x5483ff=_0x5a4f,_0x50f736=_0x31403a();while(!![]){try{const _0x3f8776=-parseInt(_0x5483ff(0x143))/0x1+-parseInt(_0x5483ff(0x141))/0x2+parseInt(_0x5483ff(0x140))/0x3*(-parseInt(_0x5483ff(0x13a))/0x4)+-parseInt(_0x5483ff(0x132))/0x5*(parseInt(_0x5483ff(0x135))/0x6)+parseInt(_0x5483ff(0x133))/0x7+parseInt(_0x5483ff(0x146))/0x8+parseInt(_0x5483ff(0x13c))/0x9*(parseInt(_0x5483ff(0x145))/0xa);if(_0x3f8776===_0x98ea4e)break;else _0x50f736['push'](_0x50f736['shift']());}catch(_0x462b75){_0x50f736['push'](_0x50f736['shift']());}}}(_0xf652,0x9172c));const loadingText=document[_0x39e7e7(0x13f)](_0x39e7e7(0x13b));let dots=0x0;const loadingInterval=setInterval(()=>{const _0x19842c=_0x39e7e7;dots=(dots+0x1)%0x4,loadingText[_0x19842c(0x13e)]=_0x19842c(0x138)+'.'[_0x19842c(0x144)](dots);},0xfa);function _0xf652(){const _0x5330c6=['block','textContent','getElementById','3384942POpVcM','568912sTPxVz','display','574618lrtNjr','repeat','340ayAega','3146560LYtiiV','8705aHkxvm','5977125SLbgRT','loading-screen','186HNwnVk','none','style','Loading','addEventListener','4fSFhzS','loading-text','367920RQvegg'];_0xf652=function(){return _0x5330c6;};return _0xf652();}function _0x5a4f(_0x4553f7,_0x4a523f){const _0xf652e3=_0xf652();return _0x5a4f=function(_0x5a4f42,_0x34099f){_0x5a4f42=_0x5a4f42-0x132;let _0x5ddfd3=_0xf652e3[_0x5a4f42];return _0x5ddfd3;},_0x5a4f(_0x4553f7,_0x4a523f);}window[_0x39e7e7(0x139)]('load',()=>{setTimeout(()=>{const _0x5d00c0=_0x5a4f;clearInterval(loadingInterval),document[_0x5d00c0(0x13f)](_0x5d00c0(0x134))[_0x5d00c0(0x137)][_0x5d00c0(0x142)]=_0x5d00c0(0x136),document[_0x5d00c0(0x13f)]('main-content')[_0x5d00c0(0x137)][_0x5d00c0(0x142)]=_0x5d00c0(0x13d);},0x1f4);});
     </script>
 </body>
 
